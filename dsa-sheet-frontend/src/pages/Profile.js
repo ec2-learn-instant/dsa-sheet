@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { USER_UPDATE_URL } from "../endpoint";
 
 const Profile = () => {
   const [user, setUser] = useState({ username: "", email: "" });
@@ -28,7 +29,7 @@ const Profile = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
-      const res = await fetch("http://91.99.180.11:5000/api/users/update", {
+      const res = await fetch(USER_UPDATE_URL, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

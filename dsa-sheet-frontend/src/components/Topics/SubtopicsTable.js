@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import {  FiTrash2 } from "react-icons/fi";
+import { SUB_TOPICS_URL } from "../../endpoint";
+import Loader from "../Loader";
+import { FiLoader } from "react-icons/fi";
 
- const ConfirmModal = ({ message, onConfirm, onCancel }) => {
+ const ConfirmModal = ({ message, onConfirm, onCancel, deleteSubTopicId }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-80">
@@ -14,10 +17,12 @@ import {  FiTrash2 } from "react-icons/fi";
             Cancel
           </button>
           <button
+          disabled={deleteSubTopicId}
             onClick={onConfirm}
-            className="px-3 py-1 rounded bg-red-600 text-white hover:bg-red-700"
+            className=" flex items-center justify-center px-3 py-1 rounded bg-red-600 text-white hover:bg-red-700"
           >
-            Delete
+             {deleteSubTopicId && <FiLoader className="animate-spin mr-2" size={20} />}
+                {deleteSubTopicId ? "Deleting..." : "Delete"}
           </button>
         </div>
       </div>
@@ -29,19 +34,23 @@ import {  FiTrash2 } from "react-icons/fi";
 const SubtopicsTable = ({ subtopics, refreshTopics }) => {
   const [tasks, setTasks] = useState([]);
   const [modal, setModal] = useState({ isOpen: false, subtopicId: null });
+  const [updateSubTopicId, setUpdateSubTopicId] = useState(null);
+  const [deleteSubTopicId, setDeleteSubTopicId] = useState(null);
+  
 
   useEffect(() => {
     setTasks(subtopics);
   }, [subtopics]);
 
   const handleStatusChange = async (id) => {
+    setUpdateSubTopicId(id);
     const subtopic = tasks.find((s) => s.id === id);
     if (!subtopic) return;
 
     const newStatus = subtopic.status === "Done" ? "Pending" : "Done";
 
     try {
-      const res = await fetch(`http://91.99.180.11:5000/api/subtopics/${id}`, {
+      const res = await fetch(`${SUB_TOPICS_URL}/${id}`, {
         method: "PUT", // assuming your backend uses PUT for updates
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus }),
@@ -53,13 +62,16 @@ const SubtopicsTable = ({ subtopics, refreshTopics }) => {
       }
 
       // Update local state
-      setTasks(
-        tasks.map((s) => (s.id === id ? { ...s, status: newStatus } : s))
-      );
+      // setTasks(
+      //   tasks.map((s) => (s.id === id ? { ...s, status: newStatus } : s))
+      // );
+     
       refreshTopics();
     } catch (err) {
       console.error("Error updating status:", err);
       alert(err.message);
+    } finally {
+        setUpdateSubTopicId(null);
     }
   };
 
@@ -69,8 +81,9 @@ const SubtopicsTable = ({ subtopics, refreshTopics }) => {
 
   const handleDelete = async () => {
     const id = modal.subtopicId;
+    setDeleteSubTopicId(id);
     try {
-      const res = await fetch(`http://91.99.180.11:5000/api/subtopics/${id}`, {
+      const res = await fetch(`${SUB_TOPICS_URL}/${id}`, {
         method: "DELETE",
       });
 
@@ -79,13 +92,14 @@ const SubtopicsTable = ({ subtopics, refreshTopics }) => {
         throw new Error(data.message || "Failed to delete subtopic");
       }
 
-      setTasks(tasks.filter((t) => t.id !== id));
+      // setTasks(tasks.filter((t) => t.id !== id));
       refreshTopics();
     } catch (err) {
       console.error("Error deleting subtopic:", err);
       alert(err.message);
     } finally {
       setModal({ isOpen: false, subtopicId: null });
+      setDeleteSubTopicId(null);
     }
   };
 
@@ -133,12 +147,15 @@ const SubtopicsTable = ({ subtopics, refreshTopics }) => {
             >
               {/* Checkbox */}
               <td className="px-4 py-2 text-center">
+                {updateSubTopicId === s.id ? (
+                 <Loader size={15} />
+                ) : (
                 <input
                   type="checkbox"
                   checked={s.status === "Done"}
                   onChange={() => handleStatusChange(s.id)}
                   className="w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500"
-                />
+                />)}
               </td>
 
               {/* Name */}
@@ -215,6 +232,7 @@ const SubtopicsTable = ({ subtopics, refreshTopics }) => {
 
              <td className="px-4 py-2 text-center">
                   <button
+                  
                     onClick={() => confirmDelete(s.id)}
                     className="text-red-500 hover:text-red-600"
                   >
@@ -231,6 +249,7 @@ const SubtopicsTable = ({ subtopics, refreshTopics }) => {
           message="Are you sure you want to delete this subtopic?"
           onConfirm={handleDelete}
           onCancel={() => setModal({ isOpen: false, subtopicId: null })}
+          deleteSubTopicId={deleteSubTopicId}
         />
       )}
 

@@ -21,12 +21,12 @@ export const getTopicsWithSubtopics = async (req, res) => {
   try {
     // Fetch topics
     const topicsResult = await pool.query(
-      "SELECT id, topic_name, created_at FROM topics ORDER BY created_at DESC"
+      "SELECT id, topic_name, created_at FROM topics ORDER BY created_at ASC"
     );
 
     // Fetch subtopics
     const subtopicsResult = await pool.query(
-      "SELECT id, topic_id, subtopic_name, level, status, leetcode_link, youtube_link, article_link FROM subtopics"
+      "SELECT id, topic_id, subtopic_name, level, status, leetcode_link, youtube_link, article_link FROM subtopics ORDER BY created_at DESC"
     );
 
     // Merge topics and subtopics

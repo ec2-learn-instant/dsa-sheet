@@ -7,24 +7,31 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
+import Loader from "../components/Loader";
+import { PROGRESS_URL } from "../endpoint";
 
 const Progress = () => {
   const [difficultyData, setDifficultyData] = useState([]);
   const [statusData, setStatusData] = useState([]);
+    const [loading, setLoading] = useState(false); 
 
   const difficultyColors = ["#34D399", "#FBBF24", "#F87171"];
   const statusColors = ["#10B981", "#9CA3AF"];
 
   useEffect(() => {
+    
     const fetchProgress = async () => {
+         setLoading(true);
       try {
-        const res = await fetch("http://91.99.180.11:5000/api/progress");
+        const res = await fetch(PROGRESS_URL);
         const data = await res.json();
         setDifficultyData(data.difficultyData);
         setStatusData(data.statusData);
       } catch (err) {
         console.error("Error fetching progress data:", err);
-      }
+      } finally {
+      setLoading(false); 
+    }
     };
 
     fetchProgress();
@@ -34,6 +41,9 @@ const Progress = () => {
 
   return (
     <div className="p-6 space-y-8">
+        {loading ? (
+       <Loader />
+      ) : (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Difficulty Chart */}
         <div className="bg-white shadow rounded-xl p-6">
@@ -98,7 +108,7 @@ const Progress = () => {
             </ResponsiveContainer>
           </div>
         </div>
-      </div>
+      </div>)}
     </div>
   );
 };

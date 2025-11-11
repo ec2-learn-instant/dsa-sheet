@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { FiChevronDown, FiChevronUp, FiPlusCircle, FiXSquare  } from "react-icons/fi";
+import {
+  FiChevronDown,
+  FiChevronUp,
+  FiPlusCircle,
+  FiXSquare,
+} from "react-icons/fi";
 import SubtopicsTable from "./SubtopicsTable";
-import axios from "axios";
+import { FiLoader } from "react-icons/fi";
 
 const TopicAccordion = ({ topic, refreshTopics, isOpen, setOpenTopicId }) => {
   const [showForm, setShowForm] = useState(false);
   const [subtopics, setSubtopics] = useState(topic.subtopics);
+  const [addSubTopicLoading, setAddSubTopicLoading] = useState(false);
 
   useEffect(() => {
     setSubtopics(topic.subtopics);
@@ -26,7 +32,7 @@ const TopicAccordion = ({ topic, refreshTopics, isOpen, setOpenTopicId }) => {
   // ✅ Submit new subtopic using fetch and update local state
   const handleAddSubtopic = async (e) => {
     e.preventDefault();
-
+setAddSubTopicLoading(true);
     try {
       const res = await fetch("http://91.99.180.11:5000/api/subtopics", {
         method: "POST",
@@ -44,9 +50,9 @@ const TopicAccordion = ({ topic, refreshTopics, isOpen, setOpenTopicId }) => {
         throw new Error(data.message || "Failed to create subtopic");
       }
 
-      const newSubtopic = await res.json();
+      // const newSubtopic = await res.json();
       // Add newly created subtopic to local state
-      setSubtopics((prev) => [...prev, newSubtopic.subtopic]);
+      // setSubtopics((prev) => [...prev, newSubtopic.subtopic]);
       refreshTopics();
 
       // Clear form
@@ -62,6 +68,8 @@ const TopicAccordion = ({ topic, refreshTopics, isOpen, setOpenTopicId }) => {
     } catch (err) {
       console.error("Error adding subtopic:", err);
       alert(err.message);
+    }finally {
+      setAddSubTopicLoading(false); 
     }
   };
   return (
@@ -91,7 +99,11 @@ const TopicAccordion = ({ topic, refreshTopics, isOpen, setOpenTopicId }) => {
             className="text-blue-500 hover:text-blue-600"
             title="Add Subtopic"
           >
-            {!showForm ? isOpen && <FiPlusCircle size={20} />  : <FiXSquare  size={20} />}
+            {!showForm ? (
+              isOpen && <FiPlusCircle size={20} />
+            ) : (
+              <FiXSquare size={20} />
+            )}
           </button>
           {isOpen ? <FiChevronUp size={20} /> : <FiChevronDown size={20} />}
         </div>
@@ -163,12 +175,25 @@ const TopicAccordion = ({ topic, refreshTopics, isOpen, setOpenTopicId }) => {
               className="border p-2 rounded w-full"
             />
           </div>
+          <div className="flex">
           <button
             type="submit"
-            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+              disabled={addSubTopicLoading}
+               className={`flex items-center justify-center bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 ${
+        addSubTopicLoading ? "cursor-not-allowed opacity-70" : ""
+      }`}
           >
-            Add Subtopic
+              {addSubTopicLoading && <FiLoader className="animate-spin mr-2" size={20} />}
+              {addSubTopicLoading ? "Adding..." : "Add Subtopic"}
+            
           </button>
+          <button
+            onClick={() => setShowForm(!showForm)}
+            className="ml-2 bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+          >
+            Cancel
+          </button>
+           </div>
         </form>
       )}
 
