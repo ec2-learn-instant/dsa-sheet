@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { USER_UPDATE_URL } from "../endpoint";
 
-const Profile = () => {
+const UpdateProfile = () => {
   const [user, setUser] = useState({ username: "", email: "" });
   const [newUsername, setNewUsername] = useState("");
   const [message, setMessage] = useState({ text: "", type: "" });
@@ -120,4 +120,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default UpdateProfile;

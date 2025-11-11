@@ -61,7 +61,7 @@ const Login = () => {
 
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
-      navigate("/topics");
+      navigate("/dashboard");
     } catch (err) {
       setErrors({ general: err.message });
     } finally {

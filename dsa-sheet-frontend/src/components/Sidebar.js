@@ -15,17 +15,17 @@ const Sidebar = () => {
         Dashboard
       </div>
       <nav className="flex-1 p-4 space-y-2">
-        {/* <NavLink to="/dashboard" className={linkClasses}>
+        <NavLink to="/dashboard" className={linkClasses}>
           Dashboard
-        </NavLink> */}
+        </NavLink>
         <NavLink to="/topics" className={linkClasses}>
           Topics
         </NavLink>
         <NavLink to="/progress" className={linkClasses}>
           Progress
         </NavLink>
-        <NavLink to="/profile" className={linkClasses}>
-          Profile
+        <NavLink to="/update-profile" className={linkClasses}>
+          Update Profile
         </NavLink>
       </nav>
     </aside>

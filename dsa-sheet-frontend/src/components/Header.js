@@ -9,7 +9,7 @@ const Header = () => {
   const getTitle = () => {
     if (location.pathname.startsWith("/topics")) return "Topics Overview";
     if (location.pathname.startsWith("/progress")) return "Progress Overview";
-    if (location.pathname.startsWith("/profile")) return "Profile";
+    if (location.pathname.startsWith("/update-profile")) return "Update Profile";
     if (location.pathname.startsWith("/dashboard")) return "Dashboard";
     return "Dashboard";
   };
@@ -24,9 +24,9 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-gradient-to-r from-white to-gray-50 shadow-md p-4 flex items-center justify-between sticky top-0 z-10 border-b border-gray-200">
+    <header className="bg-gradient-to-r from-white to-gray-50 shadow-md p-2 flex items-center justify-between sticky top-0 z-10 border-b border-gray-200">
       {/* Left Section — Page Title */}
-      <h2 className="text-lg font-semibold text-gray-800 tracking-wide">
+      <h2 className="ml-5 text-lg font-semibold text-gray-800 tracking-wide">
         {getTitle()}
       </h2>
 
