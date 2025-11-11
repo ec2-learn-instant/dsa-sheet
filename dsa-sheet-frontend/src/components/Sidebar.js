@@ -12,7 +12,7 @@ const Sidebar = () => {
   return (
     <aside className="w-64 bg-gray-800 text-white flex flex-col min-h-screen">
       <div className="p-4 text-xl font-bold border-b border-gray-700">
-        Dashboard
+        Apna College
       </div>
       <nav className="flex-1 p-4 space-y-2">
         <NavLink to="/dashboard" className={linkClasses}>
