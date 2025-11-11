@@ -1,4 +1,4 @@
-const BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000/api" || "http://91.99.180.11:5000/api";
+const BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://91.99.180.11:5000/api";
 
 export const REGISTER_URL = `${BASE_URL}/auth/register`;
 export const LOGIN_URL = `${BASE_URL}/auth/login`;
