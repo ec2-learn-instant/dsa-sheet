@@ -8,16 +8,30 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axios.post("/auth/login", { email, password });
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-      navigate("/topics");
-    } catch (err) {
-      alert(err.response?.data?.message || "Login failed");
+  e.preventDefault();
+
+  try {
+    const res = await fetch("http://91.99.180.11:5000/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || "Login failed");
     }
-  };
+
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data.user));
+    navigate("/topics");
+  } catch (err) {
+    alert(err.message);
+  }
+};
 
   return (
     <div className="h-screen flex justify-center items-center bg-gray-100">

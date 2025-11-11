@@ -28,7 +28,7 @@ const TopicAccordion = ({ topic, refreshTopics, isOpen, setOpenTopicId }) => {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:5000/api/subtopics", {
+      const res = await fetch("http://91.99.180.11:5000/api/subtopics", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

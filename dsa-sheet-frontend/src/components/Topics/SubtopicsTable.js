@@ -41,7 +41,7 @@ const SubtopicsTable = ({ subtopics, refreshTopics }) => {
     const newStatus = subtopic.status === "Done" ? "Pending" : "Done";
 
     try {
-      const res = await fetch(`http://localhost:5000/api/subtopics/${id}`, {
+      const res = await fetch(`http://91.99.180.11:5000/api/subtopics/${id}`, {
         method: "PUT", // assuming your backend uses PUT for updates
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus }),
@@ -70,7 +70,7 @@ const SubtopicsTable = ({ subtopics, refreshTopics }) => {
   const handleDelete = async () => {
     const id = modal.subtopicId;
     try {
-      const res = await fetch(`http://localhost:5000/api/subtopics/${id}`, {
+      const res = await fetch(`http://91.99.180.11:5000/api/subtopics/${id}`, {
         method: "DELETE",
       });
 

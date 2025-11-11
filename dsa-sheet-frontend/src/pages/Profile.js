@@ -28,7 +28,7 @@ const Profile = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/users/update", {
+      const res = await fetch("http://91.99.180.11:5000/api/users/update", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

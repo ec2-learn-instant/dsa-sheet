@@ -18,7 +18,7 @@ const Progress = () => {
   useEffect(() => {
     const fetchProgress = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/progress");
+        const res = await fetch("http://91.99.180.11:5000/api/progress");
         const data = await res.json();
         setDifficultyData(data.difficultyData);
         setStatusData(data.statusData);

@@ -11,36 +11,53 @@ const Topics = () => {
   // Keep track of the currently open topic ID
   const [openTopicId, setOpenTopicId] = useState(null);
 
-  const fetchTopics = async () => {
-    try {
-      const res = await axios.get("http://localhost:5000/api/topics/with-subtopics");
-      setTopics(res.data);
-    } catch (err) {
-      console.error("Error fetching topics:", err);
+const fetchTopics = async () => {
+  try {
+    const res = await fetch("http://91.99.180.11:5000/api/topics/with-subtopics");
+    if (!res.ok) {
+      throw new Error("Failed to fetch topics");
     }
-  };
+    const data = await res.json();
+    setTopics(data);
+  } catch (err) {
+    console.error("Error fetching topics:", err);
+  }
+};
 
   useEffect(() => {
     fetchTopics();
   }, []);
 
-  const handleCreateTopic = async (e) => {
-    e.preventDefault();
-    setError("");
-    if (!newTopic.trim()) {
-      setError("Topic name is required");
-      return;
+const handleCreateTopic = async (e) => {
+  e.preventDefault();
+  setError("");
+
+  if (!newTopic.trim()) {
+    setError("Topic name is required");
+    return;
+  }
+
+  try {
+    const res = await fetch("http://91.99.180.11:5000/api/topics", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ topic_name: newTopic }),
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      throw new Error(data.message || "Failed to create topic");
     }
-    try {
-      await axios.post("http://localhost:5000/api/topics", { topic_name: newTopic });
-      setNewTopic("");
-      setShowForm(false);
-      fetchTopics();
-    } catch (err) {
-      console.error("Error creating topic:", err);
-      setError("Failed to create topic");
-    }
-  };
+
+    setNewTopic("");
+    setShowForm(false);
+    fetchTopics(); // Refresh the topics list
+  } catch (err) {
+    console.error("Error creating topic:", err);
+    setError(err.message || "Failed to create topic");
+  }
+};
+
 
   return (
     <div className="p-6 max-h-[86vh] overflow-y-auto">
