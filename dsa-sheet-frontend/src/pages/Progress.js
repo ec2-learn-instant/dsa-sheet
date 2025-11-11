@@ -75,7 +75,7 @@ const Progress = () => {
                         />
                       ))}
                     </Pie>
-                    <Tooltip formatter={(value) => `${value}%`} />
+                    <Tooltip formatter={(value) => `${value}`} />
                     <Legend />
                   </PieChart>
                 </ResponsiveContainer>
@@ -111,7 +111,7 @@ const Progress = () => {
                         />
                       ))}
                     </Pie>
-                    <Tooltip formatter={(value) => `${value}%`} />
+                    <Tooltip formatter={(value) => `${value}`} />
                     <Legend />
                   </PieChart>
                 </ResponsiveContainer>
